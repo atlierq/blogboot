@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.noone.common.lang.Result;
 import com.noone.entity.Blog;
 import com.noone.service.BlogService;
+import com.noone.shiro.AccountProfile;
 import com.noone.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.BeanUtils;
@@ -36,7 +37,7 @@ public class BlogController {
     @RequestMapping("/blogs")
     public Result list(@RequestParam(defaultValue = "1") Integer currentPage) {
         Page page = new Page(currentPage, 5);
-        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("create"));
+        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
         return Result.success(pageData);
 
     }
@@ -52,10 +53,11 @@ public class BlogController {
     @RequiresAuthentication
     @RequestMapping("/blogs/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
-        Blog temp = null;
+        Blog temp;
         if (ObjectUtil.isNotNull(blog.getId())) {
             temp = blogService.getById(blog.getId());
-            Assert.isTrue(temp.getId().equals(ShiroUtil.getProfile().getId()), "没有权限");
+            AccountProfile profile = ShiroUtil.getProfile();
+            Assert.isTrue(temp.getUserId().equals(ShiroUtil.getProfile().getId()), "没有权限");
 
         } else {
             temp = new Blog();
