@@ -42,16 +42,15 @@ public class BlogController {
 
     }
 
-    @RequestMapping("/blogs/{id}")
+    @RequestMapping("/blog/{id}")
     public Result detail(@PathVariable(name = "id") Long id) {
         Blog blog = blogService.getById(id);
         Assert.notNull(blog, "该博客已被删除");
-
         return Result.success(blog);
     }
 
     @RequiresAuthentication
-    @RequestMapping("/blogs/edit")
+    @RequestMapping("/blog/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
         Blog temp;
         if (ObjectUtil.isNotNull(blog.getId())) {

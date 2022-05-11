@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author NoOne
@@ -39,7 +39,7 @@ public class Blog implements Serializable {
     private String description;
     @NotBlank(message = "内容不能为空")
     private String content;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 
     private Integer status;
